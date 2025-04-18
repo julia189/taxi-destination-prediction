@@ -37,14 +37,6 @@ class MultioutputModel(Model):
     def eval(self, y_pred, y_test):
         pass
 
-class RandomForestModel():
-    def __init__(self, min_samples_leaf:float, random_state: int):
-        self.regr = RandomForestRegressor(min_samples_leaf=min_samples_leaf, random_state=random_state)
-
-    def train(self, X_train, y_train):
-        self.regr.fit(X_train, y_train)
-    
-
 
 class ClusterClassifierModel():
     def __init__(self, num_clusters):
