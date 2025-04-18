@@ -1,0 +1,63 @@
+import tensorflow as tf
+from tensorflow.keras.layers import Dense, Input
+from tensorflow.keras.models import Model
+from sklearn.multioutput import MultiOutputRegressor
+from sklearn.ensemble import RandomForestRegressor
+import pandas as pd
+
+
+class MultioutputModel(Model):
+    def __init__(self, num_features, num_samples):
+        self.input_layer = Input(shape=(num_features,num_samples))
+        self.first_dense = Dense(units=128, activation='relu')(self.input_layer)
+        self.second_dense = Dense(units=128, activation='relu')(self.first_dense)
+        
+        self.y1_output = Dense(units=1, name='y1_output')(self.second_dense)
+        self.third_dense = Dense(units=64, activation='relu')(self.second_dense)
+
+        self.y2_output = Dense(units=1, name='y2_output')(self.third_dense)
+        self.model = Model(inputs=self.input_layer, outputs=[self.y1_output, self.y2_output])
+
+
+    def train(self, X_train, y_train, epochs, batch_size, validation_data):
+        optimizer = tf.keras.optimizers.SGD(learning_rate=0.001)
+        self.model.compile(optimizer=optimizer,
+                            loss={'y1_output': 'mse', 'y2_output': 'mse'},
+                            metrics={'y1_output': tf.keras.metrics.RootMeanSquaredError(),
+                                     'y2_output': tf.keras.metrics.RootMeanSquaredError()})
+        self.model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_data=validation_data)
+
+    
+    def predict(self, X_test):
+        y_pred = self.model.predict(X_test)
+        return y_pred 
+
+    
+    def eval(self, y_pred, y_test):
+        pass
+
+class RandomForestModel():
+    def __init__(self, min_samples_leaf:float, random_state: int):
+        self.regr = RandomForestRegressor(min_samples_leaf=min_samples_leaf, random_state=random_state)
+
+    def train(self, X_train, y_train):
+        self.regr.fit(X_train, y_train)
+    
+
+
+class ClusterClassifierModel():
+    def __init__(self, num_clusters):
+        self.num_clusters = num_clusters
+
+    def train(self, X_train, y_train):
+        pass
+
+    def predict(self, X_test):
+        pass
+     
+    def preprocess_data(self, data: pd.DataFrame) -> pd.DataFrame:
+        pass
+
+    def eval(self, y_pred, y_test):
+        pass
+    
