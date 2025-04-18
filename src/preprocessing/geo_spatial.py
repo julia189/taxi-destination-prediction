@@ -2,6 +2,7 @@ import math
 
 import geojson
 import pandas as pd
+import logging 
 from sklearn.metrics.pairwise import haversine_distances
 
 
@@ -38,6 +39,14 @@ def calculate_polyline_features(data: pd.DataFrame) -> pd.DataFrame:
     )
     return modified_data
 
+def extract_lat_lon(data, column_):
+    try:
+        data[column_+'_lon'] = data[column_].apply(lambda value: value[0])
+        data[column_+'_lat'] = data[column_].apply(lambda value: value[1])
+    except Exception as e:
+        logging.info(e)
+        logging.info("Try converting to geojson format")
+    return data
 
 def haversine_distance(lat1, lat2, lon1, lon2) -> float:
     """
