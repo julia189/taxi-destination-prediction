@@ -40,8 +40,7 @@ def filter_invalid_trips(data: pd.DataFrame, column_coordinate_points: str, id_c
     """
     modified_data = data.copy()
     modified_data = modified_data[modified_data[(column_coordinate_points)] >= n_points]
-    vc = modified_data[id_column].value_counts().reset_index()
-    duplicated_ids = vc[vc[id_column] > 1][id_column].unique()
+    duplicated_ids = modified_data[modified_data[id_column].map(modified_data[id_column].value_counts()) > 1][id_column].unique()
     if len(duplicated_ids) > 0:
         duplicated_data = modified_data[modified_data[id_column].isin(duplicated_ids)]
         valid_data = modified_data[~modified_data[id_column].isin(duplicated_ids)]
