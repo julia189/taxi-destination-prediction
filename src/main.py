@@ -1,6 +1,6 @@
 if __name__ == "__main__":
     import pandas as pd
-    from models.model import MultioutputModel
+    from modelling.model import MultioutputModel
     from preprocessing.geo_spatial import calculate_bearing
     
     #X_train = pd.read_csv('data/processed/X_train.csv', header=0, index_col=False).to_numpy()

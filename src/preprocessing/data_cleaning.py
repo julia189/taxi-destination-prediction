@@ -7,14 +7,14 @@ from sklearn.metrics.pairwise import haversine_distances
 
 
 
-def split_lat_lon(data, lon_sequence_column: str, lat_sequence_column: str, sequence_column: str) -> pd.DataFrame:
+def split_lat_lon(data, sequence_column: str) -> pd.DataFrame:
     modified_data = data.copy()
-    modified_data[lon_sequence_column] = modified_data[sequence_column].apply(
+    modified_data[str('lon_') + sequence_column] = modified_data[sequence_column].apply(
         lambda sequence_: np.array(
             [value_[1] for value_ in enumerate(sequence_) if value_[0] % 2 == 0]
         )
     )
-    modified_data[lat_sequence_column] = modified_data[sequence_column].apply(
+    modified_data[str('lat_') + sequence_column] = modified_data[sequence_column].apply(
         lambda sequence_: np.array(
             [value_[1] for value_ in enumerate(sequence_) if value_[0] % 2 != 0]
         )

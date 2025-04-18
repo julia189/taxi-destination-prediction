@@ -1,12 +1,13 @@
+
+import pandas as pd
+from sklearn.multioutput import MultiOutputRegressor
+from sklearn.ensemble import RandomForestRegressor
 import tensorflow as tf
 from tensorflow.keras.layers import Dense, Input
 from tensorflow.keras.models import Model
-from sklearn.multioutput import MultiOutputRegressor
-from sklearn.ensemble import RandomForestRegressor
-import pandas as pd
-
 
 class MultioutputModel(Model):
+
     def __init__(self, num_features, num_samples):
         self.input_layer = Input(shape=(num_features,num_samples))
         self.first_dense = Dense(units=128, activation='relu')(self.input_layer)
