@@ -8,8 +8,8 @@ from tensorflow.keras.models import Model
 
 class MultioutputModel(Model):
 
-    def __init__(self, num_features, num_samples):
-        self.input_layer = Input(shape=(num_features,num_samples))
+    def __init__(self, num_timesteps, num_features=1):
+        self.input_layer = Input(shape=(num_timesteps, num_features))
         self.first_dense = Dense(units=128, activation='relu')(self.input_layer)
         self.second_dense = Dense(units=128, activation='relu')(self.first_dense)
         
@@ -20,13 +20,13 @@ class MultioutputModel(Model):
         self.model = Model(inputs=self.input_layer, outputs=[self.y1_output, self.y2_output])
 
 
-    def train(self, X_train, y_train, epochs, batch_size, validation_data):
-        optimizer = tf.keras.optimizers.SGD(learning_rate=0.001)
+    def train(self, X_train, y_train, epochs, batch_size, validation_data, learning_rate=0.0001, *args, **kwargs):
+        optimizer = tf.keras.optimizers.SGD(learning_rate=learning_rate)
         self.model.compile(optimizer=optimizer,
                             loss={'y1_output': 'mse', 'y2_output': 'mse'},
                             metrics={'y1_output': tf.keras.metrics.RootMeanSquaredError(),
                                      'y2_output': tf.keras.metrics.RootMeanSquaredError()})
-        self.model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_data=validation_data)
+        self.model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_data=validation_data, *args, **kwargs)
 
     
     def predict(self, X_test):

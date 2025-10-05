@@ -67,6 +67,18 @@ def haversine_distance(lat1, lat2, lon1, lon2) -> float:
     result = result * 6371000 / 1000
     return result[0][1]
 
+def pair_wise_haversine_distance(point_sequence :list) -> list:
+    """Haversine distance between pair wise points in a sequence
+    """
+    distance_array = []
+    prev_point = None
+    for current_point in point_sequence:
+        if prev_point != None:
+            current_distance = haversine_distance(lat1=prev_point[0],lat2=current_point[0], lon1=prev_point[1],lon2=current_point[1])
+            distance_array = np.append(current_distance, distance_array)
+        prev_point = current_point
+    return distance_array
+
 
 def calculate_bearing(point_A, point_B):
     deg2rad = math.pi / 180
