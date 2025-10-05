@@ -44,9 +44,11 @@ venv.bak/
 # data
 /data/**
 data
+*.csv
 
 # vscode 
 .vscode
 
 .pyc
 __pycache__/
+
