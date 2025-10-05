@@ -22,14 +22,14 @@ def split_lat_lon(data, sequence_column: str) -> pd.DataFrame:
     return modified_data
 
 
-def create_fix_length_sequences(data, n_limited, start_sequence_column: str, stop_sequence_column: str, sequence_column: str) -> pd.DataFrame:
+def create_fix_length_sequences(data, n_limited,  sequence_column: str) -> pd.DataFrame:
+    """
+    Selects first n_limited from array and last n_limited from array and concatenates them 
+    """
     modified_data = data.copy()
-    modified_data[start_sequence_column] = modified_data[sequence_column].apply(
-        lambda sequence: sequence[0 : 2 * n_limited]
-    )
-    modified_data[stop_sequence_column] = modified_data[sequence_column].apply(
-        lambda sequence: sequence[-2 * n_limited :]
-    )
+    modified_data[sequence_column + '_transformed'] = modified_data[sequence_column]\
+    .apply(lambda sequence: sequence[0 : n_limited] + sequence[-1 * (n_limited+1): -1])
+
     return modified_data
 
 
