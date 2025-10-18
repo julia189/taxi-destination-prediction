@@ -51,14 +51,22 @@ class BasePreprocessor():
         # non_features = [non_feature.lower() for non_feature in non_features]
         return data 
 
-class MulitoutputNNPreprocessor(BasePreprocessor):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+class SequencePreprocessor(BasePreprocessor):
+    def __init__(self,n_min_points: int, id_column: str, model_columns: list, num_timesteps: int, num_features: int):
+        super().__init__(n_min_points, id_column, model_columns)
+        self.num_timesteps = num_timesteps
+        self.num_features = num_features
 
     def preprocess_data(self, data: pd.DataFrame, is_training: bool) -> pd.DataFrame:
-        data = super().preprocess_data(data.copy(), is_training=is_training)
+        data = super.preprocess_data(data.copy(), is_training=is_training)
+        data = self
         return data
     
+    def create_sequence(data: pd.DataFrame, seq_length: int, num_features: int, num_seq: int):
+        X = []
+        for i in range(num_seq):
+            a = data[]
+
 
 class ClusteringPreprocessor(BasePreprocessor):
     def __init__(self,n_clusters: int, pipe: Pipeline, centers, cluster_target,  *args, **kwargs):
